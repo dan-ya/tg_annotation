@@ -512,7 +512,7 @@ class PointTier(_Tier):
                 fout.write(f'\ttime = {point.time}\n')
                 fout.write(f'\ttext = {point.text}\n')
 
-    def write_seg(self, file: Union[str, Path], tier_type: [str, None] = None, samplerate: int = 22050, byterate: int = 2, encoding: str = 'cp1251'):
+    def write_seg(self, file: Union[str, Path], tier_type: str = 'G1', samplerate: int = 22050, byterate: int = 2, encoding: str = 'cp1251'):
         with open(file, 'w', encoding=encoding) as fout:
             if tier_type is not None:
                 tier_type = seg_name2id(tier_type)
