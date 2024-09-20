@@ -475,7 +475,7 @@ class PointTier(_Tier):
             for i in range(tier_size):
                 source.readline()
                 time = float(source.readline().split(' = ')[-1].strip())
-                text = source.readline().split(' = ')[-1].strip('\n\r"')
+                text = source.readline().split(' = ')[-1].strip().strip('"')
                 self.add(time, text)
 
     def read_seg(self, file: Union[str, Path], encoding: str = 'cp1251'):
@@ -677,7 +677,7 @@ class IntervalTier(_Tier):
                 source.readline()
                 start_time = float(source.readline().split(' = ')[-1].strip())
                 end_time = float(source.readline().split(' = ')[-1].strip())
-                text = source.readline().split(' = ')[-1].strip('\n\r"')
+                text = source.readline().split(' = ')[-1].strip().strip('"')
                 self.add(start_time, end_time, text)
 
     def write(self, file: Union[str, Path], encoding: str = 'utf-8'):
@@ -835,8 +835,8 @@ class TextGrid(_Tier):
             source.readline()
             for i_tier in range(n_tiers):
                 source.readline()
-                if source.readline().split(' = ')[-1].strip('\n\r"') == 'IntervalTier':
-                    tier_name = source.readline().split(' = ')[-1].strip('\n\r"')
+                if source.readline().split(' = ')[-1].strip().strip('"') == 'IntervalTier':
+                    tier_name = source.readline().split(' = ')[-1].strip().strip('"')
                     start_time = float(source.readline().split(' = ')[-1].strip())
                     end_time = float(source.readline().split(' = ')[-1].strip())
                     tier = IntervalTier(tier_name, start_time, end_time)
@@ -845,11 +845,11 @@ class TextGrid(_Tier):
                         source.readline()
                         start_time = float(source.readline().split(' = ')[-1].strip())
                         end_time = float(source.readline().split(' = ')[-1].strip())
-                        text = source.readline().split(' = ')[-1].strip('\n\r"')
+                        text = source.readline().split(' = ')[-1].strip().strip('"')
                         tier.add(start_time, end_time, text)
                     self.append(tier)
                 else:
-                    tier_name = source.readline().split(' = ')[-1].strip('"\n\r')
+                    tier_name = source.readline().split(' = ')[-1].strip().strip('"')
                     start_time = float(source.readline().split(' = ')[-1].strip())
                     end_time = float(source.readline().split(' = ')[-1].strip())
                     tier = PointTier(tier_name, start_time, end_time)
@@ -857,7 +857,7 @@ class TextGrid(_Tier):
                     for j in range(tier_size):
                         source.readline()
                         time = float(source.readline().split(' = ')[-1].strip())
-                        text = source.readline().split(' = ')[-1].strip('\n\r"')
+                        text = source.readline().split(' = ')[-1].strip().strip('"')
                         tier.add(time, text)
                     self.append(tier)
         return self
