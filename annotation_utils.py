@@ -881,7 +881,7 @@ class TextGrid(_Tier):
                         fout.write(f'\t\t\tintervals [{j}]:\n')
                         fout.write(f'\t\t\t\txmin = {interval.start_time}\n')
                         fout.write(f'\t\t\t\txmax = {interval.end_time}\n')
-                        fout.write(f'\t\t\t\ttext = "{interval.text}\n"')
+                        fout.write(f'\t\t\t\ttext = "{interval.text}"\n')
                 elif type(tier) == PointTier:
                     fout.write('\t\tclass = "TextTier"\n')
                     fout.write(f'\t\tname = "{tier.name}"\n')
