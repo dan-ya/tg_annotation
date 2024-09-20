@@ -469,13 +469,13 @@ class PointTier(_Tier):
         with open(file, 'r', encoding=encoding) as source:
             for i in range(3):
                 source.readline()
-            self.start_time = float(source.readline().strip().split()[-1])
-            self.end_time = float(source.readline().strip().split()[-1])
-            tier_size = int(source.readline().strip().split()[-1])
+            self.start_time = float(source.readline().split(' = ')[-1].strip())
+            self.end_time = float(source.readline().split(' = ')[-1].strip())
+            tier_size = int(source.readline().split(' = ')[-1].strip())
             for i in range(tier_size):
                 source.readline()
-                time = float(source.readline().strip().split()[-1])
-                text = source.readline().strip('\n\r').split()[-1]
+                time = float(source.readline().split(' = ')[-1].strip())
+                text = source.readline().split(' = ')[-1].strip('\n\r"')
                 self.add(time, text)
 
     def read_seg(self, file: Union[str, Path], encoding: str = 'cp1251'):
@@ -670,14 +670,14 @@ class IntervalTier(_Tier):
         with open(file, 'r', encoding=encoding) as source:
             for i in range(3):
                 source.readline()
-            self.start_time = float(source.readline().strip().split()[-1])
-            self.end_time = float(source.readline().strip().split()[-1])
-            tier_size = int(source.readline().strip().split()[-1])
+            self.start_time = float(source.readline().split(' = ')[-1].strip())
+            self.end_time = float(source.readline().split(' = ')[-1].strip())
+            tier_size = int(source.readline().split(' = ')[-1].strip())
             for i in range(tier_size):
                 source.readline()
-                start_time = float(source.readline().strip().split()[-1])
-                end_time = float(source.readline().strip().split()[-1])
-                text = source.readline().strip('\n\r').split()[-1]
+                start_time = float(source.readline().split(' = ')[-1].strip())
+                end_time = float(source.readline().split(' = ')[-1].strip())
+                text = source.readline().split(' = ')[-1].strip('\n\r"')
                 self.add(start_time, end_time, text)
 
     def write(self, file: Union[str, Path], encoding: str = 'utf-8'):
@@ -825,37 +825,37 @@ class TextGrid(_Tier):
         with open(file, 'r', encoding=encoding) as source:
             for i in range(3):
                 source.readline()
-            self.start_time = float(source.readline().split()[-1])
-            self.end_time = float(source.readline().split()[-1])
+            self.start_time = float(source.readline().split(' = ')[-1].strip())
+            self.end_time = float(source.readline().split(' = ')[-1].strip())
             source.readline()
             n_tiers = int(source.readline().strip().split()[-1])
             source.readline()
             for i_tier in range(n_tiers):
                 source.readline()
-                if source.readline().strip().split()[2] == '"IntervalTier"':
-                    tier_name = source.readline().strip('\n\r').split(' = ')[-1].strip('"')
-                    tier = IntervalTier(name=tier_name)
-                    for i in range(2):
-                        source.readline()
-                    tier_size = int(source.readline().strip().split()[-1])
+                if source.readline().split(' = ')[-1].strip('\n\r"') == 'IntervalTier':
+                    tier_name = source.readline().split(' = ')[-1].strip('\n\r"')
+                    start_time = float(source.readline().split(' = ')[-1].strip())
+                    end_time = float(source.readline().split(' = ')[-1].strip())
+                    tier = IntervalTier(tier_name, start_time, end_time)
+                    tier_size = int(source.readline().split(' = ')[-1].strip())
                     for j in range(tier_size):
                         source.readline()
-                        start_time = float(source.readline().strip().split()[-1])
-                        end_time = float(source.readline().strip().split()[-1])
-                        text = source.readline().strip('\n\r').split()[-1][1:-1]
+                        start_time = float(source.readline().split(' = ')[-1].strip())
+                        end_time = float(source.readline().split(' = ')[-1].strip())
+                        text = source.readline().split(' = ')[-1].strip('\n\r"')
                         tier.add(start_time, end_time, text)
                     self.append(tier)
                 else:
-                    tier_name = source.readline().strip('\n\r').split(' = ')[-1].strip('"')
-                    tier = PointTier(name=tier_name)
-                    for i in range(2):
-                        source.readline()
-                    tier_size = int(source.readline().strip().split()[-1])
+                    tier_name = source.readline().split(' = ')[-1].strip('"\n\r')
+                    start_time = float(source.readline().split(' = ')[-1].strip())
+                    end_time = float(source.readline().split(' = ')[-1].strip())
+                    tier = PointTier(tier_name, start_time, end_time)
+                    tier_size = int(source.readline().split(' = ')[-1].strip())
                     for j in range(tier_size):
                         source.readline()
-                        time = float(source.readline().rstrip().split()[-1])
-                        name = source.readline().strip('\n\r').split()[-1][1:-1]
-                        tier.add(time, name)
+                        time = float(source.readline().split(' = ')[-1].strip())
+                        text = source.readline().split(' = ')[-1].strip('\n\r"')
+                        tier.add(time, text)
                     self.append(tier)
         return self
 
