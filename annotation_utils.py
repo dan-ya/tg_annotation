@@ -810,9 +810,12 @@ class TextGrid(_Tier):
     def get_tier_names(self) -> list[str]:
         return [tier.name for tier in self]
 
-    def append(self, tier: Union[PointTier, IntervalTier]):
+    def append(self, tier: Union[PointTier, IntervalTier], name: Union[str, None] = None):
         self.start_time = min(self.start_time, tier.start_time)
         self.end_time = max(self.end_time, tier.end_time)
+        if name is not None:
+            tier = copy.deepcopy(tier)
+            tier.name = name
         self._objects.append(tier)
 
     def extend(self, tiers: list[Union[PointTier, IntervalTier]]):
