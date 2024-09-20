@@ -142,7 +142,7 @@ class Interval:
 
     @text.setter
     def text(self, other: str):
-        self.text = other
+        self._text = other
 
     def __repr__(self):
         text = self.text if self.text else None
@@ -338,7 +338,7 @@ class _Tier:
 
     @name.setter
     def name(self, other: str):
-        self.name = other
+        self._name = other
 
     def __str__(self):
         name = self.name if self.name else None
