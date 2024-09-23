@@ -211,6 +211,12 @@ class Interval:
         self.end_time = self.end_time - other
         return self
 
+    def concatenate(self, other: Union['Interval', int, float], delimiter: str = ''):
+        if hasattr(other, 'start_time') and hasattr(other, 'end_time') and hasattr(other, 'text'):
+            self._start_time = min(self.start_time, other.start_time)
+            self._end_time = max(self.end_time, other.end_time)
+            self.text = self.text + delimiter + other.text
+
     def duration(self) -> float:
         return self.end_time - self.start_time
 
