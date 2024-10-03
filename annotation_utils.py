@@ -4,7 +4,7 @@
 @author: Daniil Kocharov (dan_ya)
 """
 from copy import deepcopy
-from bisect import bisect_left
+from bisect import bisect_right
 from pathlib import Path
 from typing import Union
 
@@ -451,7 +451,7 @@ class PointTier(_Tier):
     def add_point(self, point: Point, overwrite: bool = False):
         self.start_time = min(self.start_time, point.time)
         self.end_time = max(self.end_time, point.time)
-        i = bisect_left(self._objects, point)
+        i = bisect_right(self._objects, point)
         if i < len(self._objects) and self._objects[i].time == point.time:
             if overwrite:
                 self.remove_point(self[i])
@@ -649,7 +649,7 @@ class IntervalTier(_Tier):
     def add_interval(self, interval: Interval, overwrite: bool = False):
         self.start_time = min(self.start_time, interval.start_time)
         self.end_time = max(self.end_time, interval.end_time)
-        i = bisect_left(self._objects, interval)
+        i = bisect_right(self._objects, interval)
         if i != len(self._objects) and self[i] == interval:
             if overwrite:
                 self.remove_interval(self[i])
