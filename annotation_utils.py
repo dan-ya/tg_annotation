@@ -712,7 +712,7 @@ class IntervalTier(_Tier):
                 output.append(Interval(prev_t, interval.start_time))
             output.append(interval)
             prev_t = interval.end_time
-        if output[-1].end_time < self.end_time:
+        if len(output) != 0 and output[-1].end_time < self.end_time:
             output.append(Interval(output[-1].end_time, self.end_time))
         return output
 
