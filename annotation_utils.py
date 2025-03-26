@@ -725,8 +725,7 @@ class IntervalTier(_Tier):
 
     @classmethod
     def from_seg_file(cls, file: Union[str, Path], name: str = '') -> 'IntervalTier':
-        pt = PointTier(name=name)
-        pt.read_seg(file)
+        pt = PointTier.from_seg_file(file, name)
         it = IntervalTier.from_point_tier(pt)
         return it
 
