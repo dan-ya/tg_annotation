@@ -765,6 +765,8 @@ class TextGrid(_Tier):
     False
     >>> 'it_foo' in bar
     True
+    >>> del bar['it_foo']  # delete all Tiers with name 'it_foo'
+    
     >>> bar[0]
     <IntervalTier it_foo, 0 intervals>
     >>> bar['pt_foo']
@@ -801,6 +803,17 @@ class TextGrid(_Tier):
             if t.name == value:
                 return True
         return False
+
+    def __delitem__(self, i: [str, int]):
+        if type(i) is str:
+            to_remove = [t for t in range(len(self._objects) - 1, -1, -1) if t.name == i]
+            for t in to_remove:
+                del self._objects[t]
+        elif type(i) is int:
+            del self._objects[i]
+        else:
+            raise TypeError(f'The index type should be either str or int.')
+        return None
 
     def __getitem__(self, i: [str, int]):
         if type(i) is str:
