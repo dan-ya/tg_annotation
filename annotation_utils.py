@@ -806,7 +806,7 @@ class TextGrid(_Tier):
 
     def __delitem__(self, i: [str, int]):
         if type(i) is str:
-            to_remove = [t for t in range(len(self._objects) - 1, -1, -1) if t.name == i]
+            to_remove = [t for t in range(len(self._objects) - 1, -1, -1) if self._objects[t].name == i]
             for t in to_remove:
                 del self._objects[t]
         elif type(i) is int:
