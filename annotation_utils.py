@@ -846,7 +846,7 @@ class TextGrid(_Tier):
         self.start_time = min(self.start_time, tier.start_time)
         self.end_time = max(self.end_time, tier.end_time)
         if name is not None:
-            tier = copy.deepcopy(tier)
+            tier = deepcopy(tier)
             tier.name = name
         self._objects.append(tier)
 
@@ -933,3 +933,21 @@ class TextGrid(_Tier):
         tg = cls(name=name)
         tg.read(file)
         return tg
+
+    @classmethod
+    def extract_selected(cls, file: Union[str, Path], start_time: float, end_time: float, name: str = ''):
+        tg = cls.from_file(file)
+        target_interval = Interval(start_time, end_time)
+        extracted_tg = cls(name=name, start_time=start_time, end_time=end_time - start_time)
+        for tier in tg:
+            items_to_add = [i for i in tier if i in target_interval]
+            if type(tier) is PointTier:
+                extracted_tier = PointTier(name=tier.name)
+                for item in items_to_add:
+                    extracted_tier.add(item.time - start_time, item.text)
+            else:
+                extracted_tier = IntervalTier(name=tier.name)
+                for item in items_to_add:
+                    extracted_tier.add(item.start_time - start_time, item.end_time - start_time, item.text)
+            extracted_tg.append(extracted_tier)
+        return extracted_tg
