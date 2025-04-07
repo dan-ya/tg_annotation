@@ -454,10 +454,16 @@ class PointTier(_Tier):
         i = bisect_right(self._objects, point)
         if i < len(self._objects) and self._objects[i].time == point.time:
             if overwrite:
-                self.remove_point(self[i])
+                self[i].text = point.text
             else:
                 return
-        self._objects.insert(i, point)
+        elif i > 0 and i == len(self._objects) and self._objects[-1].time == point.time:
+            if overwrite:
+                self[-1].text = point.text
+            else:
+                return
+        else:
+            self._objects.insert(i, point)
 
     def bounds(self) -> tuple[float, float]:
         return self.start_time, self.end_time
@@ -650,12 +656,18 @@ class IntervalTier(_Tier):
         self.start_time = min(self.start_time, interval.start_time)
         self.end_time = max(self.end_time, interval.end_time)
         i = bisect_right(self._objects, interval)
-        if i != len(self._objects) and self[i] == interval:
+        if i < len(self._objects) and self._objects[i] == interval:
             if overwrite:
-                self.remove_interval(self[i])
+                self[i].text = interval.text
             else:
                 return
-        self._objects.insert(i, interval)
+        elif i > 0 and i == len(self._objects) and self._objects[-1] == interval:
+            if overwrite:
+                self[-1].text = interval.text
+            else:
+                return
+        else:
+            self._objects.insert(i, interval)
 
     def bounds(self) -> tuple[float, float]:
         return self.start_time, self.end_time
