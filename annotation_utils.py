@@ -778,6 +778,12 @@ class TextGrid(_Tier):
     >>> 'it_foo' in bar
     True
     >>> del bar['it_foo']  # delete all Tiers with name 'it_foo'
+    ['pt_foo', 'it_bar', 'pt_bar']
+    >>> bar.insert(0, IntervalTier('it_foo'))
+    ['it_foo', 'pt_foo', 'it_bar', 'pt_bar']
+
+    >>> bar.index('pt_foo')
+    1
     
     >>> bar[0]
     <IntervalTier it_foo, 0 intervals>
@@ -853,6 +859,21 @@ class TextGrid(_Tier):
     def extend(self, tiers: list[Union[PointTier, IntervalTier]]):
         for tier in tiers:
             self.append(tier)
+
+    def index(self, name: str) -> Union[int, None]:
+        for i, tier in enumerate(self._objects):
+            if getattr(tier, 'name', None) == name:
+                return i
+        return None
+
+    def insert(self, index: int, tier: Union['IntervalTier', 'PointTier']):
+        if not is_tier(tier):
+            raise TypeError("Only IntervalTier or PointTier instances can be inserted.")
+        if not isinstance(index, int):
+            raise TypeError("Index must be an integer.")
+        if index < 0 or index > len(self._objects):
+            raise IndexError("Index out of bounds.")
+        self._objects.insert(index, tier)
 
     def read(self, file: Union[str, Path], encoding: str = 'utf-8'):
         if self.name == '':
@@ -951,3 +972,6 @@ class TextGrid(_Tier):
                     extracted_tier.add(item.start_time - start_time, item.end_time - start_time, item.text)
             extracted_tg.append(extracted_tier)
         return extracted_tg
+
+def is_tier(obj: Any) -> bool:
+    return isinstance(obj, (IntervalTier, PointTier))
