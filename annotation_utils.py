@@ -6,7 +6,7 @@
 from copy import deepcopy
 from bisect import bisect_right
 from pathlib import Path
-from typing import Union
+from typing import Union, Any
 
 __all__ = ['Interval', 'Point', 'IntervalTier', 'PointTier', 'TextGrid']
 
@@ -541,7 +541,7 @@ class PointTier(_Tier):
             fout.write('[LABELS]\n')
             for point in self._objects:
                 value = round(point.time * samplerate * byterate)
-                fout.write(f'{value},{tier_type},{point.text}')
+                fout.write(f'{value},{tier_type},{point.text}\n')
 
     # alternative constructors
     @classmethod
