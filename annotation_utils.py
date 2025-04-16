@@ -429,6 +429,7 @@ class PointTier(_Tier):
     # writing to Praat Tier file
     >>> foo.write(file_path)
     >>> foo.write(file_path, encoding='utf-8')
+    >>> foo.write(file_path, object_class='PitchTier', encoding='utf-8')
     # writing to WaveAssistant Seg file
     >>> foo.write_seg(file_path)
     >>> foo.write_seg(file_path, encoding='cp1251')
@@ -512,9 +513,10 @@ class PointTier(_Tier):
             if self.name == '':
                 self.name = tier_name
 
-    def write(self, file: Union[str, Path], encoding: str = 'utf-8'):
+    def write(self, file: Union[str, Path], object_class: str = 'TextTier', encoding: str = 'utf-8'):
         with open(file, 'w', encoding=encoding) as fout:
             fout.write('File type = "ooTextFile"\n')
+            fout.write(f'Object class = "{object_class}"\n\n')
             fout.write('Object class = "TextTier"\n\n')
             fout.write(f'xmin = {self.start_time}\n')
             fout.write(f'xmax = {self.end_time}\n')
