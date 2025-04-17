@@ -234,7 +234,7 @@ class Interval:
         return self.start_time, self.end_time
 
     def to_dict(self) -> dict[str, Union[str, float]]:
-        return {'text': self.text, 'min': self.start_time, 'max': self.end_time}
+        return {'text': self.text, 'start_time': self.start_time, 'end_time': self.end_time}
 
 
 class Point(Interval):
